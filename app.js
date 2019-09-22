@@ -1,19 +1,43 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
+
 const app = express();
+
+/**
+ * MIDDLEWARE
+ */
 
 // How we use middleware
 // express.json() is our middleware
 // middleware: function that can modify incoming request data
+app.use(morgan('dev'));
 app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log('Hello from the middleware');
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
+/**
+ * ROUTE HANDLERS
+ */
+
 const getAllTours = (req, res) => {
+  console.log(req.requestTime);
+
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     results: tours.length,
     data: {
       // key of tours is the endpoint from the url /api/v1/tours
@@ -108,6 +132,10 @@ const deleteTour = (req, res) => {
 // app.patch('/api/v1/tours/:id', updateTour);
 // app.delete('/api/v1/tours/:id', deleteTour);
 
+/**
+ * ROUTES
+ */
+
 app
   .route('/api/v1/tours')
   .get(getAllTours)
@@ -119,8 +147,11 @@ app
   .patch(updateTour)
   .delete(deleteTour);
 
-const port = 3000;
+/**
+ * START SERVER
+ */
 
+const port = 3000;
 app.listen(port, () => {
   console.log(`App running on port: ${port}`);
 });
