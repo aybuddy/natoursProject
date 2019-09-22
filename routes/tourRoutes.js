@@ -12,6 +12,10 @@ const tourController = require('../controllers/tourController');
 
 const router = express.Router();
 
+// param middleware runs only for certain parameters
+// only for certain param in url
+router.param('id', tourController.checkID);
+
 // 1st Method
 router
   .route('/')
