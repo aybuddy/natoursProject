@@ -14,7 +14,7 @@ const router = express.Router();
 
 // param middleware runs only for certain parameters
 // only for certain param in url
-router.param('id', tourController.checkID);
+// router.param('id', tourController.checkID);
 
 // 1st Method
 router

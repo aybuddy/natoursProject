@@ -1,20 +1,4 @@
-const fs = require('fs');
-
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-);
-
-exports.checkID = (req, res, next, val) => {
-  console.log(`Tour id is: ${val}`);
-
-  if (req.params.id * 1 > tours.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID'
-    });
-  }
-  next();
-};
+const Tour = require('./../models/tourModel');
 
 exports.checkBody = (req, res, next) => {
   if (!req.body.name || !req.body.price) {
@@ -31,13 +15,13 @@ exports.getAllTours = (req, res) => {
 
   res.status(200).json({
     status: 'success',
-    requestedAt: req.requestTime,
-    results: tours.length,
-    data: {
-      // key of tours is the endpoint from the url /api/v1/tours
-      // value of tours is the const tours from fs.readFileSync
-      tours: tours
-    }
+    requestedAt: req.requestTime
+    // results: tours.length,
+    // data: {
+    //   // key of tours is the endpoint from the url /api/v1/tours
+    //   // value of tours is the const tours from fs.readFileSync
+    //   tours: tours
+    // }
   });
 };
 
@@ -49,38 +33,23 @@ exports.getTour = (req, res) => {
   // Trick: When you multiply a string to a number, JS will
   // automatically conver the string to a number
   const id = req.params.id * 1;
-  const tour = tours.find(el => el.id === id);
+  // const tour = tours.find(el => el.id === id);
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour
-    }
-  });
+  // res.status(200).json({
+  //   status: 'success',
+  //   data: {
+  //     tour
+  //   }
+  // });
 };
 
 exports.createTour = (req, res) => {
-  const newId = tours[tours.length - 1].id + 1;
-  const newTour = Object.assign({ id: newId }, req.body);
-
-  // console.log(req.body.name);
-  // console.log(req.body.price);
-
-  tours.push(newTour);
-
-  fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
-    err => {
-      // 201 is created new resource
-      res.status(201).json({
-        status: 'success',
-        data: {
-          tour: newTour
-        }
-      });
-    }
-  );
+  res.status(201).json({
+    status: 'success'
+    // data: {
+    //   tour: newTour
+    // }
+  });
 };
 
 exports.updateTour = (req, res) => {
