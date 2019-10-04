@@ -1,13 +1,18 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
-const reviewController = require('../controllers/reviewController');
+const reviewRouter = require('./../routes/reviewRoutes');
 
 const router = express.Router();
 
 // param middleware runs only for certain parameters
 // only for certain param in url
 // router.param('id', tourController.checkID);
+
+// GET /tour/1234/reviews
+// GET /tour/12345/reviews/12345
+
+router.use('/:tourId/reviews', reviewRouter);
 
 router
   .route('/top-5-tours')
@@ -29,17 +34,6 @@ router
     authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
     tourController.deleteTour
-  );
-
-// POST /tour/12345/reviews
-// GET /tour/1234/reviews
-// GET /tour/12345/reviews/12345
-router
-  .route('/:tourId/reviews')
-  .post(
-    authController.protect,
-    authController.restrictTo('user'),
-    reviewController.createReview
   );
 
 module.exports = router;
