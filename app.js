@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -14,16 +15,13 @@ const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
 
-/**
- * MIDDLEWARE
- */
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
-// How we use middleware
-// express.json() is our middleware
-// middleware: function that can modify incoming request data
+// GLOBAL MIDDLEWARES
 
-// GLobal middelwares
-
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 // Set security HTTP Headers
 app.use(helmet());
 
@@ -64,9 +62,6 @@ app.use(
   })
 );
 
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
-
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -76,6 +71,13 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.get('/', (req, res) => {
+  res.status(200).render('base', {
+    tour: 'The Forest Hiker',
+    user: 'Carson'
+  });
+});
+
 // Mount our routers
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
