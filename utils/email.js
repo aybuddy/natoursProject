@@ -28,14 +28,11 @@ module.exports = class Email {
   // send the actual email
   async send(template, subject) {
     // 1. render HTML based on pug template
-    const html = pug.renderFile(
-      `${__dirname}/../views/emails/${template}.pug`,
-      {
-        firstName: this.firstName,
-        url: this.url,
-        subject
-      }
-    );
+    const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
+      firstName: this.firstName,
+      url: this.url,
+      subject
+    });
 
     // 2. define email options
     const mailOptions = {
