@@ -8769,7 +8769,7 @@ var _login = require("./login");
 // import { logout } from '../../controllers/authController';
 // DOM elements
 var mapBox = document.getElementById('map');
-var loginForm = document.querySelector('.form');
+var loginForm = document.querySelector('.form--login');
 var logoutBtn = document.querySelector('.nav__el--logout'); // Delegation
 
 if (mapBox) {
