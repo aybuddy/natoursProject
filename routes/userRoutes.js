@@ -6,10 +6,7 @@ const router = express.Router();
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
-//
-// FIXME: TODO: When user logs out, it displays an error. Only happens when
-// it's from the /me route.
-//
+
 router.get('/logout', authController.logout);
 
 router.post('/forgotPassword', authController.forgotPassword);
